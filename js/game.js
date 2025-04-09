@@ -9,14 +9,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const endGameButton = document.getElementById('end-game-button');
     const timerDisplay = document.getElementById('timer');
 
-let cards = [];
+    let cards = [];
     let currentCard = null;
-    let currentTeam = localStorage.getItem('currentTeam') || localStorage.getItem('teamAName') || 'Team A'; // Default to Team A initially
+    let currentTeam = localStorage.getItem('currentTeam') || localStorage.getItem('teamAName') || 'Team A';
     let teamAScore = 0;
     let teamBScore = 0;
     let timeLeft = 60;
     let timerInterval;
-    let cardsInPlay = []; // Initialized as empty
+    let cardsInPlay = [];
     let teamAGuessedWords = [];
     let teamBGuessedWords = [];
     let teamATabooedWords = [];
@@ -24,12 +24,16 @@ let cards = [];
 
     // Load card data
     import('../data/cards.js').then(module => {
-        cards = [...module.cardsData]; // Create a copy
-        cardsInPlay = [...cards];    // Initialize cardsInPlay with all cards
-        loadNewCard();               // Load the first card on page load
+        cards = [...module.cardsData];
+        cardsInPlay = [...cards];
+        // loadNewCard(); <--- REMOVE THIS LINE
     }).catch(error => {
         console.error("Error loading card data:", error);
     });
+
+    function updateActiveTeamDisplay() {
+        activeTeamNameDisplay.textContent = currentTeam;
+    }
 
     function loadNewCard() {
         if (cardsInPlay.length > 0) {
@@ -65,12 +69,7 @@ let cards = [];
         passButton.disabled = false;
 
         // Load the first card when the timer starts
-        if (!currentCard) {
-            loadNewCard();
-        }
-    }
-        // Load the first card when the timer starts
-        if (!currentCard) { // Only load if a card hasn't been loaded yet
+        if (!currentCard && cardsInPlay.length > 0) { // Ensure there are cards to load
             loadNewCard();
         }
     }
@@ -83,10 +82,10 @@ let cards = [];
         currentTeam = (currentTeam === localStorage.getItem('teamAName')) ? localStorage.getItem('teamBName') : localStorage.getItem('teamAName');
         localStorage.setItem('currentTeam', currentTeam);
         updateActiveTeamDisplay();
-        loadNewCard(); // Load a new card for the next team's turn
+        loadNewCard();
     }
 
-function handleCorrectGuess() {
+    function handleCorrectGuess() {
         if (currentCard) {
             if (currentTeam === localStorage.getItem('teamAName')) {
                 teamAScore++;
@@ -95,7 +94,7 @@ function handleCorrectGuess() {
                 teamBScore++;
                 teamBGuessedWords.push(currentCard.guessWord);
             }
-            loadNewCard(); // This line should load the next card
+            loadNewCard();
         }
     }
 
@@ -108,35 +107,14 @@ function handleCorrectGuess() {
                 teamBScore--;
                 teamBTabooedWords.push(currentCard.guessWord);
             }
-            loadNewCard(); // This line should load the next card
+            loadNewCard();
         }
     }
 
     function handlePass() {
         if (currentCard) {
-            cardsInPlay.push(currentCard); // Put the card back
-            loadNewCard(); // This line should load the next card
-        }
-    }
-
-    correctButton.addEventListener('click', handleCorrectGuess);
-    tabooButton.addEventListener('click', handleTaboo);
-    passButton.addEventListener('click', handlePass);
-
-    function loadNewCard() {
-        if (cardsInPlay.length > 0) {
-            const randomIndex = Math.floor(Math.random() * cardsInPlay.length);
-            currentCard = cardsInPlay.splice(randomIndex, 1)[0];
-            guessWordDisplay.textContent = currentCard.guessWord;
-            tabooWordsList.innerHTML = '';
-            currentCard.tabooWords.forEach(word => {
-                const li = document.createElement('li');
-                li.textContent = word;
-                tabooWordsList.appendChild(li);
-            });
-        } else {
-            alert("No more cards!");
-            endGame(); // Or handle the end of the deck differently
+            cardsInPlay.push(currentCard);
+            loadNewCard();
         }
     }
 
@@ -156,6 +134,5 @@ function handleCorrectGuess() {
     passButton.addEventListener('click', handlePass);
     endGameButton.addEventListener('click', endGame);
 
-    // Initial setup
     updateActiveTeamDisplay();
 });
