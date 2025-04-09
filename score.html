@@ -1,1 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Taboo - Score</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container score-screen">
+        <h1>Game Over!</h1>
+        <div class="team-scores">
+            <h2 id="team-a-final-score">Team A: 0</h2>
+            <div id="team-a-words">
+                <h3>Team A Words:</h3>
+                <p>Correct: <span id="team-a-correct-words"></span></p>
+                <p>Tabooed: <span id="team-a-tabooed-words"></span></p>
+            </div>
+        </div>
+        <div class="team-scores">
+            <h2 id="team-b-final-score">Team B: 0</h2>
+            <div id="team-b-words">
+                <h3>Team B Words:</h3>
+                <p>Correct: <span id="team-b-correct-words"></span></p>
+                <p>Tabooed: <span id="team-b-tabooed-words"></span></p>
+            </div>
+        </div>
+        <button id="play-again-button">Play another round</button>
+    </div>
 
+    <script src="js/score.js"></script>
+</body>
+</html>
