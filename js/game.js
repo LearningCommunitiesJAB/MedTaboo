@@ -9,14 +9,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const endGameButton = document.getElementById('end-game-button');
     const timerDisplay = document.getElementById('timer');
 
-    let cards = [];
+let cards = [];
     let currentCard = null;
     let currentTeam = localStorage.getItem('currentTeam') || localStorage.getItem('teamAName') || 'Team A'; // Default to Team A initially
     let teamAScore = 0;
     let teamBScore = 0;
     let timeLeft = 60;
     let timerInterval;
-    let cardsInPlay = [];
+    let cardsInPlay = []; // Initialized as empty
     let teamAGuessedWords = [];
     let teamBGuessedWords = [];
     let teamATabooedWords = [];
@@ -24,16 +24,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Load card data
     import('../data/cards.js').then(module => {
-        cards = [...module.cardsData]; // Create a copy so we can remove played cards
-        cardsInPlay = [...cards];
-        loadNewCard();
+        cards = [...module.cardsData]; // Create a copy
+        cardsInPlay = [...cards];    // Initialize cardsInPlay with all cards
+        loadNewCard();               // Load the first card on page load
     }).catch(error => {
         console.error("Error loading card data:", error);
     });
-
-    function updateActiveTeamDisplay() {
-        activeTeamNameDisplay.textContent = currentTeam;
-    }
 
     function loadNewCard() {
         if (cardsInPlay.length > 0) {
@@ -48,11 +44,11 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         } else {
             alert("No more cards!");
-            endGame(); // Or handle the end of the deck differently
+            endGame();
         }
     }
 
-function startTimer() {
+    function startTimer() {
         timeLeft = 60;
         timerDisplay.textContent = timeLeft;
         timerInterval = setInterval(() => {
@@ -68,6 +64,11 @@ function startTimer() {
         tabooButton.disabled = false;
         passButton.disabled = false;
 
+        // Load the first card when the timer starts
+        if (!currentCard) {
+            loadNewCard();
+        }
+    }
         // Load the first card when the timer starts
         if (!currentCard) { // Only load if a card hasn't been loaded yet
             loadNewCard();
