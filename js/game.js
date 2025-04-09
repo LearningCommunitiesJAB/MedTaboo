@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function startTimer() {
+function startTimer() {
         timeLeft = 60;
         timerDisplay.textContent = timeLeft;
         timerInterval = setInterval(() => {
@@ -67,6 +67,11 @@ document.addEventListener('DOMContentLoaded', () => {
         correctButton.disabled = false;
         tabooButton.disabled = false;
         passButton.disabled = false;
+
+        // Load the first card when the timer starts
+        if (!currentCard) { // Only load if a card hasn't been loaded yet
+            loadNewCard();
+        }
     }
 
     function endTurn() {
