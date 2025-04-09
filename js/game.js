@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
         loadNewCard(); // Load a new card for the next team's turn
     }
 
-    function handleCorrectGuess() {
+function handleCorrectGuess() {
         if (currentCard) {
             if (currentTeam === localStorage.getItem('teamAName')) {
                 teamAScore++;
@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 teamBScore++;
                 teamBGuessedWords.push(currentCard.guessWord);
             }
-            loadNewCard();
+            loadNewCard(); // This line should load the next card
         }
     }
 
@@ -102,14 +102,35 @@ document.addEventListener('DOMContentLoaded', () => {
                 teamBScore--;
                 teamBTabooedWords.push(currentCard.guessWord);
             }
-            loadNewCard();
+            loadNewCard(); // This line should load the next card
         }
     }
 
     function handlePass() {
         if (currentCard) {
             cardsInPlay.push(currentCard); // Put the card back
-            loadNewCard();
+            loadNewCard(); // This line should load the next card
+        }
+    }
+
+    correctButton.addEventListener('click', handleCorrectGuess);
+    tabooButton.addEventListener('click', handleTaboo);
+    passButton.addEventListener('click', handlePass);
+
+    function loadNewCard() {
+        if (cardsInPlay.length > 0) {
+            const randomIndex = Math.floor(Math.random() * cardsInPlay.length);
+            currentCard = cardsInPlay.splice(randomIndex, 1)[0];
+            guessWordDisplay.textContent = currentCard.guessWord;
+            tabooWordsList.innerHTML = '';
+            currentCard.tabooWords.forEach(word => {
+                const li = document.createElement('li');
+                li.textContent = word;
+                tabooWordsList.appendChild(li);
+            });
+        } else {
+            alert("No more cards!");
+            endGame(); // Or handle the end of the deck differently
         }
     }
 
