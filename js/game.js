@@ -22,14 +22,15 @@ document.addEventListener('DOMContentLoaded', () => {
     let teamATabooedWords = [];
     let teamBTabooedWords = [];
 
-    // Load card data
-    import('../data/cards.js').then(module => {
-        cards = [...module.cardsData];
-        cardsInPlay = [...cards];
-        // loadNewCard(); <--- REMOVE THIS LINE
-    }).catch(error => {
-        console.error("Error loading card data:", error);
-    });
+import('../data/cards.js')
+  .then(module => {
+    console.log('Cards loaded:', module.cardsData);  // Add this
+    cards = [...module.cardsData];
+    cardsInPlay = [...cards];
+  })
+  .catch(error => {
+    console.error("Error loading card data:", error);
+  });
 
     function updateActiveTeamDisplay() {
         activeTeamNameDisplay.textContent = currentTeam;
