@@ -22,15 +22,17 @@ document.addEventListener('DOMContentLoaded', () => {
     let teamATabooedWords = [];
     let teamBTabooedWords = [];
 
-import('../data/cards.js')
-  .then(module => {
-    console.log('Cards loaded:', module.cardsData);  // Add this
-    cards = [...module.cardsData];
-    cardsInPlay = [...cards];
-  })
-  .catch(error => {
-    console.error("Error loading card data:", error);
-  });
+    // Load card data
+    import('../data/cards.js')
+      .then(module => {
+        console.log('Cards loaded:', module.cardsData);  // Debugging: Log loaded cards
+        cards = [...module.cardsData];
+        cardsInPlay = [...cards];
+        console.log('Cards in play:', cardsInPlay);  // Debugging: Check if cards are populated correctly
+      })
+      .catch(error => {
+        console.error("Error loading card data:", error);
+      });
 
     function updateActiveTeamDisplay() {
         activeTeamNameDisplay.textContent = currentTeam;
@@ -47,6 +49,7 @@ import('../data/cards.js')
                 li.textContent = word;
                 tabooWordsList.appendChild(li);
             });
+            console.log('New card loaded:', currentCard);  // Debugging: Log current card details
         } else {
             alert("No more cards!");
             endGame();
@@ -54,6 +57,7 @@ import('../data/cards.js')
     }
 
     function startTimer() {
+        console.log('Timer started');  // Debugging: Confirm that the timer is starting
         timeLeft = 60;
         timerDisplay.textContent = timeLeft;
         timerInterval = setInterval(() => {
@@ -129,7 +133,10 @@ import('../data/cards.js')
         window.location.href = 'score.html';
     }
 
-    startButton.addEventListener('click', startTimer);
+    startButton.addEventListener('click', () => {
+        console.log('Start button clicked');  // Debugging: Confirm start button is clicked
+        startTimer();
+    });
     correctButton.addEventListener('click', handleCorrectGuess);
     tabooButton.addEventListener('click', handleTaboo);
     passButton.addEventListener('click', handlePass);
