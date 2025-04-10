@@ -29,6 +29,9 @@ document.addEventListener('DOMContentLoaded', () => {
         cards = [...module.cardsData];
         cardsInPlay = [...cards];
         console.log('Cards in play:', cardsInPlay);  // Debugging: Check if cards are populated correctly
+
+        // Enable the start button and prepare game
+        startButton.disabled = false;  // Enable start button after cards are loaded
       })
       .catch(error => {
         console.error("Error loading card data:", error);
@@ -57,6 +60,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function startTimer() {
+        if (!currentCard && cardsInPlay.length > 0) { // Ensure there are cards to load
+            loadNewCard();
+        }
+
         console.log('Timer started');  // Debugging: Confirm that the timer is starting
         timeLeft = 60;
         timerDisplay.textContent = timeLeft;
@@ -68,15 +75,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 endTurn();
             }
         }, 1000);
+
+        // Disable buttons to prevent clicking while the timer is running
         startButton.disabled = true;
         correctButton.disabled = false;
         tabooButton.disabled = false;
         passButton.disabled = false;
-
-        // Load the first card when the timer starts
-        if (!currentCard && cardsInPlay.length > 0) { // Ensure there are cards to load
-            loadNewCard();
-        }
     }
 
     function endTurn() {
