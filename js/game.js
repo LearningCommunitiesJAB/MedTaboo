@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let teamBTabooedWords = [];
 
     // Load card data
-    import('../data/cards.js')
+    import('./data/cards.js')
       .then(module => {
         console.log('Cards loaded:', module.cardsData);  // Debugging: Log loaded cards
         cards = [...module.cardsData];
