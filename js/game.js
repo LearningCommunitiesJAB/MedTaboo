@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let teamBGuessedWords = [];
     let teamATabooedWords = [];
     let teamBTabooedWords = [];
+    let hasPassed = false;
 
     // Load card data
     import('./data/cards.js')
@@ -83,16 +84,19 @@ document.addEventListener('DOMContentLoaded', () => {
         passButton.disabled = false;
     }
 
-    function endTurn() {
-        startButton.disabled = false;
-        correctButton.disabled = true;
-        tabooButton.disabled = true;
-        passButton.disabled = true;
-        currentTeam = (currentTeam === localStorage.getItem('teamAName')) ? localStorage.getItem('teamBName') : localStorage.getItem('teamAName');
-        localStorage.setItem('currentTeam', currentTeam);
-        updateActiveTeamDisplay();
-        loadNewCard();
-    }
+function endTurn() {
+    startButton.disabled = false;
+    correctButton.disabled = true;
+    tabooButton.disabled = true;
+    passButton.disabled = false;  // Re-enable the Pass button for the next round
+    hasPassed = false;  // Reset the "hasPassed" flag for the next round
+
+    currentTeam = (currentTeam === localStorage.getItem('teamAName')) ? localStorage.getItem('teamBName') : localStorage.getItem('teamAName');
+    localStorage.setItem('currentTeam', currentTeam);
+    updateActiveTeamDisplay();
+    loadNewCard();
+}
+
 
     function handleCorrectGuess() {
         if (currentCard) {
@@ -120,12 +124,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function handlePass() {
+function handlePass() {
+    if (!hasPassed) {  // Only allow one pass per round
         if (currentCard) {
             cardsInPlay.push(currentCard);
-            loadNewCard();
+            loadNewCard();  // Load a new card
+            hasPassed = true;  // Mark that the pass button has been used
+            passButton.disabled = true;  // Disable the Pass button
         }
     }
+}
+
 
     function endGame() {
         localStorage.setItem('teamAScore', teamAScore);
