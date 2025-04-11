@@ -95,6 +95,12 @@ function startTimer() {
     tabooButton.disabled = false;
     passButton.disabled = false;
 
+    // Optional: Disable Pass after one use if you're still doing that
+    passUsed = false;
+    passButton.disabled = false;
+}
+
+
 function endTurn() {
     startButton.disabled = false;
     correctButton.disabled = true;
