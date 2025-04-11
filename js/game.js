@@ -94,7 +94,6 @@ function endTurn() {
     currentTeam = (currentTeam === localStorage.getItem('teamAName')) ? localStorage.getItem('teamBName') : localStorage.getItem('teamAName');
     localStorage.setItem('currentTeam', currentTeam);
     updateActiveTeamDisplay();
-    loadNewCard();
 }
 
 
