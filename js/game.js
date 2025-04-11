@@ -60,29 +60,40 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function startTimer() {
-        if (!currentCard && cardsInPlay.length > 0) { // Ensure there are cards to load
-            loadNewCard();
-        }
-
-        console.log('Timer started');  // Debugging: Confirm that the timer is starting
-        timeLeft = 60;
-        timerDisplay.textContent = timeLeft;
-        timerInterval = setInterval(() => {
-            timeLeft--;
-            timerDisplay.textContent = timeLeft;
-            if (timeLeft <= 0) {
-                clearInterval(timerInterval);
-                endTurn();
-            }
-        }, 1000);
-
-        // Disable buttons to prevent clicking while the timer is running
-        startButton.disabled = true;
-        correctButton.disabled = false;
-        tabooButton.disabled = false;
-        passButton.disabled = false;
+function startTimer() {
+    // If a card is currently showing, return it to the pool
+    if (currentCard) {
+        cardsInPlay.push(currentCard);
+        currentCard = null;
     }
+
+    // Load a new card for the round
+    if (cardsInPlay.length > 0) {
+        loadNewCard();
+    } else {
+        alert("No more cards!");
+        endGame();
+        return;
+    }
+
+    console.log('Timer started');
+    timeLeft = 60;
+    timerDisplay.textContent = timeLeft;
+
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        timerDisplay.textContent = timeLeft;
+
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            endTurn(); // Timer's up
+        }
+    }, 1000);
+
+    startButton.disabled = true;
+    correctButton.disabled = false;
+    tabooButton.disabled = false;
+    passButton.disabled = false;
 
 function endTurn() {
     startButton.disabled = false;
