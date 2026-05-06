@@ -60,10 +60,6 @@ export const cardsData = [
     "tabooWords": ["Mentor", "Mauka", "Moku", "curriculum", "Makai"]
   },
   {
-    "guessWord": "Dr. Richard Kasuya",
-    "tabooWords": ["Medical Education", "Basketball", "clinical skills", "MD1", "PBL"]
-  },
-  {
     "guessWord": "Dr. Jill Omori",
     "tabooWords": ["OME", "family Med", "HOME Project", "dog", "oh my god"]
   },
