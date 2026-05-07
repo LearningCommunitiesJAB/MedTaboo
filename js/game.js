@@ -42,23 +42,34 @@ document.addEventListener('DOMContentLoaded', () => {
         activeTeamNameDisplay.textContent = currentTeam;
     }
 
-    function loadNewCard() {
-        if (cardsInPlay.length > 0) {
-            const randomIndex = Math.floor(Math.random() * cardsInPlay.length);
-            currentCard = cardsInPlay.splice(randomIndex, 1)[0];
-            guessWordDisplay.textContent = currentCard.guessWord;
-            tabooWordsList.innerHTML = '';
-            currentCard.tabooWords.forEach(word => {
-                const li = document.createElement('li');
-                li.textContent = word;
-                tabooWordsList.appendChild(li);
-            });
-            console.log('New card loaded:', currentCard);  // Debugging: Log current card details
-        } else {
-            alert("No more cards!");
-            endGame();
-        }
+function loadNewCard() {
+    const usedA = JSON.parse(localStorage.getItem('teamAGuessedWords')) || [];
+    const usedB = JSON.parse(localStorage.getItem('teamBGuessedWords')) || [];
+    const tabooA = JSON.parse(localStorage.getItem('teamATabooedWords')) || [];
+    const tabooB = JSON.parse(localStorage.getItem('teamBTabooedWords')) || [];
+
+    const forbiddenWords = [...usedA, ...usedB, ...tabooA, ...tabooB];
+
+    cardsInPlay = cardsInPlay.filter(card => !forbiddenWords.includes(card.guessWord));
+
+    if (cardsInPlay.length > 0) {
+        const randomIndex = Math.floor(Math.random() * cardsInPlay.length);
+        
+        currentCard = cardsInPlay.splice(randomIndex, 1)[0];
+
+        guessWordDisplay.textContent = currentCard.guessWord;
+        tabooWordsList.innerHTML = '';
+        currentCard.tabooWords.forEach(word => {
+            const li = document.createElement('li');
+            li.textContent = word;
+            tabooWordsList.appendChild(li);
+        });
+    } else {
+        // 8. Handle the "Out of Cards" scenario
+        alert("Oh No! You're out of cards! $0.99 to load 100 more.");
+        endGame();
     }
+}
 
 function startTimer() {
     // If a card is currently showing, return it to the pool
@@ -114,27 +125,40 @@ function endTurn() {
 }
 
 
-    function handleCorrectGuess() {
-        if (currentCard) {
-            if (currentTeam === localStorage.getItem('teamAName')) {
-                teamAScore++;
-                teamAGuessedWords.push(currentCard.guessWord);
-            } else {
-                teamBScore++;
-                teamBGuessedWords.push(currentCard.guessWord);
-            }
-            loadNewCard();
+function handleCorrectGuess() {
+    if (currentCard) {
+        if (currentTeam === localStorage.getItem('teamAName')) {
+            teamAScore++;
+            teamAGuessedWords.push(currentCard.guessWord);
+
+            localStorage.setItem('teamAScore', teamAScore);
+            localStorage.setItem('teamAGuessedWords', JSON.stringify(teamAGuessedWords)); 
+        } else {
+            teamBScore++;
+            teamBGuessedWords.push(currentCard.guessWord);
+            
+            localStorage.setItem('teamBScore', teamBScore);
+            localStorage.setItem('teamBGuessedWords', JSON.stringify(teamBGuessedWords));
         }
+        
+        loadNewCard();
     }
+}
 
     function handleTaboo() {
         if (currentCard) {
             if (currentTeam === localStorage.getItem('teamAName')) {
                 teamAScore--;
                 teamATabooedWords.push(currentCard.guessWord);
+            
+            localStorage.setItem('teamAScore', teamAScore);
+            localStorage.setItem('teamATabooedWords', JSON.stringify(teamATabooedWords)); 
             } else {
                 teamBScore--;
                 teamBTabooedWords.push(currentCard.guessWord);
+            
+            localStorage.setItem('teamBScore', teamBScore);
+            localStorage.setItem('teamBTabooedWords', JSON.stringify(teamBTabooedWords)); 
             }
             loadNewCard();
         }
