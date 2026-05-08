@@ -66,7 +66,7 @@ function loadNewCard() {
         });
     } else {
         // 8. Handle the "Out of Cards" scenario
-        alert("Oh No! You're out of cards! $0.99 to load 100 more.");
+        alert("No new cards!");
         endGame();
     }
 }
