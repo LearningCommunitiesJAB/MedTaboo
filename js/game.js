@@ -109,7 +109,7 @@ function startTimer() {
     passButton.disabled = false;
 
     // Optional: Disable Pass after one use if you're still doing that
-    passUsed = false;
+    hasPassed = false;
     passButton.disabled = false;
 }
 
