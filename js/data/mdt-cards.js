@@ -1,4 +1,4 @@
-[
+export const cardsData = [
   {
     "guessWord": "Appendicitis",
     "tabooWords": ["appendix", "belly", "pain", "burst", "surgery"]
