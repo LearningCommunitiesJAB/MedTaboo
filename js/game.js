@@ -23,20 +23,22 @@ document.addEventListener('DOMContentLoaded', () => {
     let teamBTabooedWords = [];
     let hasPassed = false;
 
-    // Load card data
-    import('./data/cards.js')
-      .then(module => {
-        console.log('Cards loaded:', module.cardsData);  // Debugging: Log loaded cards
+// Load selected deck
+const selectedDeck = localStorage.getItem('selectedDeck') || 'cards-medical';
+
+import(`./data/${selectedDeck}.js`)
+    .then(module => {
+        console.log(`${selectedDeck} loaded`);
+        console.log(module.cardsData);
+
         cards = [...module.cardsData];
         cardsInPlay = [...cards];
-        console.log('Cards in play:', cardsInPlay);  // Debugging: Check if cards are populated correctly
 
-        // Enable the start button and prepare game
-        startButton.disabled = false;  // Enable start button after cards are loaded
-      })
-      .catch(error => {
+        startButton.disabled = false;
+    })
+    .catch(error => {
         console.error("Error loading card data:", error);
-      });
+    });
 
     function updateActiveTeamDisplay() {
         activeTeamNameDisplay.textContent = currentTeam;
