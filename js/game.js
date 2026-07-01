@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let hasPassed = false;
 
 // Load selected deck
-const selectedDeck = localStorage.getItem('selectedDeck') || 'cards-medical';
+const selectedDeck = localStorage.getItem('selectedDeck') || 'mdt-cards';
 
 import(`./data/${selectedDeck}.js`)
     .then(module => {
